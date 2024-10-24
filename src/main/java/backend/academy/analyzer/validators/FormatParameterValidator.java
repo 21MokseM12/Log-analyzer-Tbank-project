@@ -1,9 +1,17 @@
 package backend.academy.analyzer.validators;
 
-public class FormatParameterValidator implements ParameterValidator{
+import backend.academy.analyzer.enums.PrintFormat;
+
+public class FormatParameterValidator implements ParameterValidator {
+
     @Override
     public boolean isValid(String paramBody) {
-        //todo
+        for (PrintFormat format : PrintFormat.values()) {
+            if (format.toString().equals(paramBody)) {
+                return true;
+            }
+        }
+
         return false;
     }
 }
