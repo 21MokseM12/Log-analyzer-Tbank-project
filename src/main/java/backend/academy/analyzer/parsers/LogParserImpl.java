@@ -1,6 +1,7 @@
 package backend.academy.analyzer.parsers;
 
 import backend.academy.analyzer.model.Log;
+import lombok.extern.log4j.Log4j2;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -8,6 +9,7 @@ import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 
+@Log4j2
 public class LogParserImpl implements LogParser {
 
     @Override
@@ -18,7 +20,7 @@ public class LogParserImpl implements LogParser {
             .map(line -> line.split(" (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)(?=(?:[^\\[]*\\[[^]]*])*[^]]*$)"))
             .map(line -> {
                 if (line.length < 9) {
-                    throw new NoSuchElementException("Лог некорректен");
+                    log.warn("Лог некорректен: %s".formatted(line[3]));
                 }
 
                 line[3] = line[3].substring(1, line[3].length()-1);
