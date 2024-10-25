@@ -1,13 +1,12 @@
 package backend.academy.analyzer.parsers;
 
 import backend.academy.analyzer.model.Log;
-import lombok.extern.log4j.Log4j2;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
-import java.util.NoSuchElementException;
 import java.util.stream.Stream;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class LogParserImpl implements LogParser {
