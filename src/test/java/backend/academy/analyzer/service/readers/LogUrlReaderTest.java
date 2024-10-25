@@ -1,6 +1,5 @@
 package backend.academy.analyzer.service.readers;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.util.NoSuchElementException;
 import java.util.stream.Stream;
@@ -32,7 +31,7 @@ public class LogUrlReaderTest {
 
     @Test
     public void checkThrowsRead() {
-        Assertions.assertThrows(NoSuchElementException.class, () -> {
+        assertThrows(NoSuchElementException.class, () -> {
             reader.read(INVALID_URL);
         });
     }
