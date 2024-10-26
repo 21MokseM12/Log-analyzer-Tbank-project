@@ -12,7 +12,7 @@ import lombok.extern.log4j.Log4j2;
 public class LogParserImpl implements LogParser {
 
     @Override
-    public Stream<Log> parse(Stream<String> logStrings, LocalDateTime from, LocalDateTime to) {
+    public Stream<Log> parseToLog(Stream<String> logStrings, LocalDateTime from, LocalDateTime to) {
         DateTimeFormatter inputTimeFormat = DateTimeFormatter.ofPattern("dd/MMM/yyyy:HH:mm:ss Z", Locale.US);
 
         return logStrings
@@ -37,5 +37,11 @@ public class LogParserImpl implements LogParser {
                 );
             })
             .filter(log -> !log.timeLocal().isBefore(from) && !log.timeLocal().isAfter(to));
+    }
+
+    @Override
+    public String parseResource(String request) {
+        String resource = request.split(" ")[1];
+        return resource.substring(resource.lastIndexOf('/')+1);
     }
 }
