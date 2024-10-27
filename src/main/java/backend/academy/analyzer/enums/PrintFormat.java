@@ -1,7 +1,7 @@
 package backend.academy.analyzer.enums;
 
 public enum PrintFormat {
-    MARKDOWN("--markdown"), ADOC("--adoc");
+    MARKDOWN("markdown"), ADOC("adoc");
 
     private final String format;
 

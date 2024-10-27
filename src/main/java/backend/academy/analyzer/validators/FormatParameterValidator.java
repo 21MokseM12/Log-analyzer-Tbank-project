@@ -11,7 +11,6 @@ public class FormatParameterValidator implements ParameterValidator {
                 return true;
             }
         }
-
         return false;
     }
 }
