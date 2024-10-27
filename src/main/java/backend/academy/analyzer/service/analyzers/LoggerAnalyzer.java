@@ -95,7 +95,7 @@ public class LoggerAnalyzer implements Analyzer {
         // Подсчет перцентиля на основе резервного набора кандидатов
         percentServerResponse = percentileCandidates.stream()
             .sorted()
-            .skip((long) (percentileCandidates.size() * PERCENTIL_VALUE) - 1)
+            .skip((long) Math.round(percentileCandidates.size() * PERCENTIL_VALUE) - 1)
             .findFirst()
             .orElse(0);
     }
