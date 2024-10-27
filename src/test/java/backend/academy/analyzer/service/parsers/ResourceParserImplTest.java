@@ -1,4 +1,4 @@
-package backend.academy.analyzer.parsers;
+package backend.academy.analyzer.service.parsers;
 
 import backend.academy.analyzer.enums.PathType;
 import backend.academy.analyzer.service.parsers.impl.ResourceParserImpl;

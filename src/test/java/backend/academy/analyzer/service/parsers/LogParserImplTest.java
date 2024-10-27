@@ -1,4 +1,4 @@
-package backend.academy.analyzer.parsers;
+package backend.academy.analyzer.service.parsers;
 
 import backend.academy.analyzer.service.parsers.impl.LogParserImpl;
 import backend.academy.analyzer.service.parsers.interfaces.LogParser;
