@@ -40,7 +40,7 @@ public class LogParserImpl implements LogParser {
     }
 
     @Override
-    public String parseResource(String request) {
+    public String parseLogRequestResource(String request) {
         String resource = request.split(" ")[1];
         return resource.substring(resource.lastIndexOf('/')+1);
     }

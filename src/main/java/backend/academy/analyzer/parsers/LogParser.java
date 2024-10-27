@@ -6,5 +6,5 @@ import java.util.stream.Stream;
 
 public interface LogParser {
     Stream<Log> parseToLog(Stream<String> logStrings, LocalDateTime from, LocalDateTime to);
-    String parseResource(String request);
+    String parseLogRequestResource(String request);
 }

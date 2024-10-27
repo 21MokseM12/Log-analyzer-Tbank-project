@@ -70,7 +70,7 @@ public class LoggerAnalyzer implements Analyzer {
                 logCount++;
                 avgServerResponse += log.responseSize();
 
-                String resourceName = logParser.parseResource(log.request());
+                String resourceName = logParser.parseLogRequestResource(log.request());
                 resourcesMap.merge(resourceName, 1, Integer::sum);
 
                 int statusCode = log.httpStatus();
