@@ -1,4 +1,4 @@
-package backend.academy.analyzer.parsers.interfaces;
+package backend.academy.analyzer.service.parsers.interfaces;
 
 import java.nio.file.Path;
 

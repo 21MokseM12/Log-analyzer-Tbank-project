@@ -2,8 +2,8 @@ package backend.academy.analyzer.service.analyzers;
 
 import backend.academy.analyzer.model.Log;
 import backend.academy.analyzer.model.LogReport;
-import backend.academy.analyzer.parsers.interfaces.LogParser;
-import backend.academy.analyzer.parsers.impl.LogParserImpl;
+import backend.academy.analyzer.service.parsers.interfaces.LogParser;
+import backend.academy.analyzer.service.parsers.impl.LogParserImpl;
 import backend.academy.analyzer.service.readers.LogLocalFileReader;
 import backend.academy.analyzer.service.readers.LogReader;
 import org.junit.jupiter.api.Test;

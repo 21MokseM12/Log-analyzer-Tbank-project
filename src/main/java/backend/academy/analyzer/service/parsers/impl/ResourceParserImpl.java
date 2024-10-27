@@ -1,7 +1,7 @@
-package backend.academy.analyzer.parsers.impl;
+package backend.academy.analyzer.service.parsers.impl;
 
 import backend.academy.analyzer.enums.PathType;
-import backend.academy.analyzer.parsers.interfaces.ResourceParser;
+import backend.academy.analyzer.service.parsers.interfaces.ResourceParser;
 import lombok.extern.log4j.Log4j2;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;

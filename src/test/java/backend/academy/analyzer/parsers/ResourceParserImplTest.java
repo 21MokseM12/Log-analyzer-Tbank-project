@@ -1,8 +1,8 @@
 package backend.academy.analyzer.parsers;
 
 import backend.academy.analyzer.enums.PathType;
-import backend.academy.analyzer.parsers.impl.ResourceParserImpl;
-import backend.academy.analyzer.parsers.interfaces.ResourceParser;
+import backend.academy.analyzer.service.parsers.impl.ResourceParserImpl;
+import backend.academy.analyzer.service.parsers.interfaces.ResourceParser;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.NoSuchElementException;

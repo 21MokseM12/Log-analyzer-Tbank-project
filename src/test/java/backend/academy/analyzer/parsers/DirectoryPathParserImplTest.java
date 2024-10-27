@@ -1,7 +1,7 @@
 package backend.academy.analyzer.parsers;
 
-import backend.academy.analyzer.parsers.impl.DirectoryPathParserImpl;
-import backend.academy.analyzer.parsers.interfaces.DirectoryPathParser;
+import backend.academy.analyzer.service.parsers.impl.DirectoryPathParserImpl;
+import backend.academy.analyzer.service.parsers.interfaces.DirectoryPathParser;
 import org.junit.jupiter.api.Test;
 import java.nio.file.Path;
 import static org.junit.jupiter.api.Assertions.assertEquals;
