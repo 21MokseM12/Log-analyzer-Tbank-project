@@ -1,7 +1,6 @@
-package backend.academy.analyzer.service.parsers;
+package backend.academy.analyzer.service.parsers.impl;
 
 import backend.academy.analyzer.enums.PathType;
-import backend.academy.analyzer.service.parsers.impl.ResourceParserImpl;
 import backend.academy.analyzer.service.parsers.interfaces.ResourceParser;
 import org.junit.jupiter.api.Test;
 import java.util.List;

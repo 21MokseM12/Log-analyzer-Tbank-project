@@ -1,6 +1,5 @@
-package backend.academy.analyzer.service.parsers;
+package backend.academy.analyzer.service.parsers.impl;
 
-import backend.academy.analyzer.service.parsers.impl.LogParserImpl;
 import backend.academy.analyzer.service.parsers.interfaces.LogParser;
 import backend.academy.analyzer.service.readers.LogLocalFileReader;
 import backend.academy.analyzer.service.readers.LogReader;

@@ -1,6 +1,5 @@
-package backend.academy.analyzer.service.parsers;
+package backend.academy.analyzer.service.parsers.impl;
 
-import backend.academy.analyzer.service.parsers.impl.DirectoryPathParserImpl;
 import backend.academy.analyzer.service.parsers.interfaces.DirectoryPathParser;
 import org.junit.jupiter.api.Test;
 import java.nio.file.Path;
