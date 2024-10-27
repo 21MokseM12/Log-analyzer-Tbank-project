@@ -6,7 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.NoSuchElementException;
 import java.util.stream.Stream;
-import backend.academy.analyzer.parsers.DirectoryPathParserImpl;
+import backend.academy.analyzer.parsers.impl.DirectoryPathParserImpl;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2

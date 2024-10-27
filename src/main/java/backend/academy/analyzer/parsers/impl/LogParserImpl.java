@@ -1,4 +1,4 @@
-package backend.academy.analyzer.parsers;
+package backend.academy.analyzer.parsers.impl;
 
 import backend.academy.analyzer.model.Log;
 import java.time.LocalDateTime;
@@ -6,6 +6,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.stream.Stream;
+import backend.academy.analyzer.parsers.interfaces.LogParser;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2

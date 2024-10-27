@@ -2,7 +2,7 @@ package backend.academy.analyzer.service.analyzers;
 
 import backend.academy.analyzer.model.Log;
 import backend.academy.analyzer.model.LogReport;
-import backend.academy.analyzer.parsers.LogParser;
+import backend.academy.analyzer.parsers.interfaces.LogParser;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package backend.academy.analyzer.parsers;
+package backend.academy.analyzer.parsers.interfaces;
 
 import backend.academy.analyzer.enums.PathType;
 import java.util.List;

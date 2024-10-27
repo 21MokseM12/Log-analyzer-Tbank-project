@@ -1,5 +1,6 @@
-package backend.academy.analyzer.parsers;
+package backend.academy.analyzer.parsers.impl;
 
+import backend.academy.analyzer.parsers.interfaces.DirectoryPathParser;
 import lombok.Getter;
 import java.nio.file.Path;
 
