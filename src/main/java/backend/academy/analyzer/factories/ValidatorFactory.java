@@ -1,4 +1,4 @@
-package backend.academy.analyzer.managers;
+package backend.academy.analyzer.factories;
 
 import backend.academy.analyzer.enums.ParameterType;
 import backend.academy.analyzer.validators.FormatParameterValidator;
@@ -9,11 +9,11 @@ import backend.academy.analyzer.validators.ToParameterValidator;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ValidatorManager {
+public class ValidatorFactory {
 
     private final Map<ParameterType, ParameterValidator> validators = new HashMap<>();
 
-    public ValidatorManager() {
+    public ValidatorFactory() {
         for (ParameterType type : ParameterType.values()) {
             if (type.equals(ParameterType.PATH)) {
                 validators.put(type, new PathParameterValidator());
