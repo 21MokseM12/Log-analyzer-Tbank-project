@@ -22,7 +22,7 @@ public class LoggerAnalyzer implements Analyzer {
 
     private long avgServerResponse;
 
-    private double percentServerResponse;
+    private long percentServerResponse;
 
     Map<String, Integer> popularResources;
 

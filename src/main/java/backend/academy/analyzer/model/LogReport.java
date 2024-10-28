@@ -20,9 +20,9 @@ public class LogReport {
 
     private long logCount;
 
-    private double avgServerResponse;
+    private long avgServerResponse;
 
-    private double percentServerResponse;
+    private long percentServerResponse;
 
     private Map<String, Integer> popularResources;
 
