@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ResourceParserImplTest {
 
@@ -38,7 +39,10 @@ public class ResourceParserImplTest {
 
     @Test
     public void checkValidParseResourceNameByLocalPathPatternMultipleFile() {
-        assertEquals(List.of("logs.txt", "logs2.txt"), parser.parsePathResourceName(PathType.LOCAL, LOCAL_PATH_PATTERN_FOR_MULTIPLE_FILE));
+        List<String> firstNameVariant = List.of("logs.txt", "logs2.txt");
+        List<String> secondNameVariant = List.of("logs2.txt", "logs.txt");
+        List<String> result = parser.parsePathResourceName(PathType.LOCAL, LOCAL_PATH_PATTERN_FOR_MULTIPLE_FILE);
+        assertTrue(result.equals(firstNameVariant) || result.equals(secondNameVariant));
     }
 
     @Test
