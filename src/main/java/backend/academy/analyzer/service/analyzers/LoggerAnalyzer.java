@@ -91,7 +91,6 @@ public class LoggerAnalyzer implements Analyzer {
     }
 
     private void calculatePercentServerResponse(List<Integer> percentileCandidates) {
-
         // Подсчет перцентиля на основе резервного набора кандидатов
         percentServerResponse = percentileCandidates.stream()
             .sorted()
