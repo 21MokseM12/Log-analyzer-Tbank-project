@@ -2,7 +2,6 @@ package backend.academy.analyzer.service.parsers.impl;
 
 import backend.academy.analyzer.enums.PathType;
 import backend.academy.analyzer.service.parsers.interfaces.ResourceParser;
-import lombok.extern.log4j.Log4j2;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -10,6 +9,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class ResourceParserImpl implements ResourceParser {
@@ -48,7 +48,7 @@ public class ResourceParserImpl implements ResourceParser {
     private List<String> parseUrlResourceName(String stringPath) {
         List<String> pathNames = new ArrayList<>();
         String[] splitPath = stringPath.split("/");
-        pathNames.add(splitPath[splitPath.length-1]);
+        pathNames.add(splitPath[splitPath.length - 1]);
         return pathNames;
     }
 }

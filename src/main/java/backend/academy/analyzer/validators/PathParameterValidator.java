@@ -14,7 +14,9 @@ public class PathParameterValidator implements ParameterValidator {
 
     @Override
     public boolean isValid(String paramBody) {
-        if (paramBody.isEmpty()) return false;
+        if (paramBody.isEmpty()) {
+            return false;
+        }
         if (isValidUrl(paramBody)) {
             return true;
         } else {
@@ -26,7 +28,7 @@ public class PathParameterValidator implements ParameterValidator {
         try {
             URI uri = new URI(url);
             return uri.getScheme() != null && (uri.getScheme().equals("http") || uri.getScheme().equals("https"));
-        } catch (URISyntaxException _) {
+        } catch (URISyntaxException e) {
             return false;
         }
     }
@@ -59,7 +61,7 @@ public class PathParameterValidator implements ParameterValidator {
         try {
             Path path = Paths.get(input);
             return Files.exists(path) && Files.isRegularFile(path);
-        } catch (InvalidPathException _) {
+        } catch (InvalidPathException e) {
             return false;
         }
     }

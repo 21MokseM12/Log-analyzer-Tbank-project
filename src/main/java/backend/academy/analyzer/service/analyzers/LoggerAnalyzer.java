@@ -111,7 +111,7 @@ public class LoggerAnalyzer implements Analyzer {
                     .toMap(
                         Map.Entry::getKey,
                         Map.Entry::getValue,
-                        (e1, _) -> e1, LinkedHashMap::new
+                        (e1, e2) -> e1, LinkedHashMap::new
                     )
             );
     }
@@ -127,7 +127,7 @@ public class LoggerAnalyzer implements Analyzer {
                     .toMap(
                         Map.Entry::getKey,
                         Map.Entry::getValue,
-                        (e1, _) -> e1, LinkedHashMap::new
+                        (e1, e2) -> e1, LinkedHashMap::new
                     )
             );
     }

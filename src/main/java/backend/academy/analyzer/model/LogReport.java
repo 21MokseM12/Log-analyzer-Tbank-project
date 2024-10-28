@@ -1,11 +1,11 @@
 package backend.academy.analyzer.model;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 @AllArgsConstructor
 @Getter

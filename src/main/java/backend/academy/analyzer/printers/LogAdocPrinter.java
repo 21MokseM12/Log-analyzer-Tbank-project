@@ -5,12 +5,10 @@ import backend.academy.analyzer.enums.ReportTopic;
 import backend.academy.analyzer.model.LogReport;
 import java.time.LocalDateTime;
 import java.util.Map;
-import lombok.extern.log4j.Log4j2;
 
-@Log4j2
 public class LogAdocPrinter implements LogPrinter {
 
-    private static final String reportPath = "./src/test/resources/reports/report.adoc";
+    private static final String REPORT_PATH = "./src/test/resources/reports/report.adoc";
 
     private static final String HEAD_DESIGNATION = "==== ";
 
@@ -23,11 +21,13 @@ public class LogAdocPrinter implements LogPrinter {
 
     private static final String TABLE_DELIMITER = "|";
 
+    private static final String DOUBLE_NEW_LINE = "\n\n";
+
     @Override
     public void print(LogReport report) {
         String formattedReport = formatToAdoc(report);
         this.printConsole(formattedReport);
-        this.printFile(formattedReport, reportPath);
+        this.printFile(formattedReport, REPORT_PATH);
     }
 
     private String formatToAdoc(LogReport report) {
@@ -40,16 +40,16 @@ public class LogAdocPrinter implements LogPrinter {
     }
 
     private void addGeneralTable(StringBuilder formattedReport, LogReport report) {
-        String resourceNames= report.sourceName().toString();
+        String resourceNames = report.sourceName().toString();
         String from = report.from().equals(LocalDateTime.MIN) ? "-" : report.from().toString();
         String to = report.to().equals(LocalDateTime.MAX) ? "-" : report.to().toString();
 
         formattedReport.append(HEAD_DESIGNATION).append(ReportTopic.GENERAL_INFO_LABEL)
-            .append("\n\n");
+            .append(DOUBLE_NEW_LINE);
         formattedReport.append(TABLE_START);
         addFirstRowToLabel(formattedReport, ReportTopic.METRIC, ReportTopic.MEANING);
         addRowToTable(formattedReport, ReportTopic.INPUT_RESOURCES_NAME.toString(),
-            resourceNames.substring(1, resourceNames.length()-1));
+            resourceNames.substring(1, resourceNames.length() - 1));
         addRowToTable(formattedReport, ReportTopic.BEGIN_DATE.toString(), from);
         addRowToTable(formattedReport, ReportTopic.END_DATE.toString(), to);
         addRowToTable(formattedReport, ReportTopic.LOG_COUNT.toString(),
@@ -58,32 +58,33 @@ public class LogAdocPrinter implements LogPrinter {
             String.valueOf(report.avgServerResponse()));
         addRowToTable(formattedReport, ReportTopic.PERCENT_SERVER_RESPONSE.toString(),
             String.valueOf(report.percentServerResponse()));
-        formattedReport.append(TABLE_END).append("\n\n");
+        formattedReport.append(TABLE_END).append(DOUBLE_NEW_LINE);
     }
 
     private void addResourceTable(StringBuilder formattedReport, LogReport report) {
         formattedReport.append(HEAD_DESIGNATION).append(ReportTopic.GENERAL_MOST_POPULAR_RESOURCES_LABEL)
-            .append("\n\n");
+            .append(DOUBLE_NEW_LINE);
         formattedReport.append(TABLE_START);
         addFirstRowToLabel(formattedReport, ReportTopic.RESOURCE_NAME, ReportTopic.COUNT);
         for (Map.Entry<String, Integer> entry : report.popularResources().entrySet()) {
             addRowToTable(formattedReport, String.valueOf(entry.getKey()), String.valueOf(entry.getValue()));
         }
-        formattedReport.append(TABLE_END).append("\n\n");
+        formattedReport.append(TABLE_END).append(DOUBLE_NEW_LINE);
     }
 
     private void addStatusCodeTable(StringBuilder formattedReport, LogReport report) {
         formattedReport.append(HEAD_DESIGNATION).append(ReportTopic.GENERAL_MOST_POPULAR_STATUS_CODES_LABEL)
-            .append("\n\n");
+            .append(DOUBLE_NEW_LINE);
         formattedReport.append(TABLE_START);
-        addFirstRowToLabel(formattedReport, ReportTopic.STATUS_CODE_VALUE, ReportTopic.STATUS_CODE_NAME, ReportTopic.COUNT);
+        addFirstRowToLabel(formattedReport, ReportTopic.STATUS_CODE_VALUE, ReportTopic.STATUS_CODE_NAME,
+            ReportTopic.COUNT);
 
         for (Map.Entry<Integer, Integer> entry : report.popularStatusCodes().entrySet()) {
             addRowToTable(formattedReport, String.valueOf(entry.getKey()),
                 HttpStatusCodes.getStatusFromCode(entry.getKey()).toString(),
                 String.valueOf(entry.getValue()));
         }
-        formattedReport.append(TABLE_END).append("\n\n");
+        formattedReport.append(TABLE_END).append(DOUBLE_NEW_LINE);
     }
 
     private void addFirstRowToLabel(StringBuilder builder, ReportTopic firstTopic, ReportTopic secondTopic) {
@@ -92,7 +93,12 @@ public class LogAdocPrinter implements LogPrinter {
             .append(TABLE_DELIMITER).append("\n");
     }
 
-    private void addFirstRowToLabel(StringBuilder builder, ReportTopic firstTopic, ReportTopic secondTopic, ReportTopic thirdTopic) {
+    private void addFirstRowToLabel(
+        StringBuilder builder,
+        ReportTopic firstTopic,
+        ReportTopic secondTopic,
+        ReportTopic thirdTopic
+    ) {
         builder.append(TABLE_DELIMITER).append(firstTopic)
             .append(TABLE_DELIMITER).append(secondTopic)
             .append(TABLE_DELIMITER).append(thirdTopic)

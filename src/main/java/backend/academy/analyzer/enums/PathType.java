@@ -17,7 +17,7 @@ public enum PathType {
                 return PathType.URL;
             }
             throw new URISyntaxException(uri.toString(), "Path is not URI");
-        } catch (URISyntaxException _) {
+        } catch (URISyntaxException e) {
             Path localPath = Paths.get(path);
             if (Files.exists(localPath)) {
                 return PathType.LOCAL;

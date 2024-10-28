@@ -10,17 +10,18 @@ import backend.academy.analyzer.service.creators.LogReportCreatorImpl;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("uncommentedmain")
 public final class App {
 
     private static final PrintFormat DEFAULT_FORMAT_VALUE = PrintFormat.MARKDOWN;
 
-    private static final Map<ParameterType, String> argumentMap = new HashMap<>();
+    private static final Map<ParameterType, String> ARGUMENT_MAP = new HashMap<>();
 
     private static final ValidatorFactory VALIDATOR_FACTORY = new ValidatorFactory();
 
     private static final LogReportCreator LOG_REPORT_CREATOR = new LogReportCreatorImpl();
 
-    private static final PrinterFactory printerFactory = new PrinterFactory();
+    private static final PrinterFactory PRINTER_FACTORY = new PrinterFactory();
 
     private App() {
     }
@@ -33,26 +34,26 @@ public final class App {
         for (int i = 0; i < args.length; i += 2) {
             for (ParameterType type : ParameterType.values()) {
                 if (type.toString().equals(args[i])) {
-                    argumentMap.put(type, args[i + 1]);
+                    ARGUMENT_MAP.put(type, args[i + 1]);
                 }
             }
         }
 
-        if (!argumentMap.containsKey(ParameterType.PATH)) {
+        if (!ARGUMENT_MAP.containsKey(ParameterType.PATH)) {
             throw new IllegalArgumentException("Параметр %s не найден".formatted(ParameterType.PATH.toString()));
         }
 
-        for (Map.Entry<ParameterType, String> entry : argumentMap.entrySet()) {
+        for (Map.Entry<ParameterType, String> entry : ARGUMENT_MAP.entrySet()) {
             if (!VALIDATOR_FACTORY.get(entry.getKey()).isValid(entry.getValue())) {
                 throw new IllegalArgumentException("Тело параметра %s некорректно".formatted(entry.getKey()));
             }
         }
 
-        LogReport report = LOG_REPORT_CREATOR.create(argumentMap);
+        LogReport report = LOG_REPORT_CREATOR.create(ARGUMENT_MAP);
 
-        printerFactory.get(
+        PRINTER_FACTORY.get(
             PrintFormat.valueOf(
-                argumentMap.getOrDefault(ParameterType.FORMAT, DEFAULT_FORMAT_VALUE.toString()).toUpperCase()
+                ARGUMENT_MAP.getOrDefault(ParameterType.FORMAT, DEFAULT_FORMAT_VALUE.toString()).toUpperCase()
             )
         ).print(report);
     }

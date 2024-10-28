@@ -1,12 +1,12 @@
 package backend.academy.analyzer.service.readers;
 
+import backend.academy.analyzer.service.parsers.impl.DirectoryPathParserImpl;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.NoSuchElementException;
 import java.util.stream.Stream;
-import backend.academy.analyzer.service.parsers.impl.DirectoryPathParserImpl;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2

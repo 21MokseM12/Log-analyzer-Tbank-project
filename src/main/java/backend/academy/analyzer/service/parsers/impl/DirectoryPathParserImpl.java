@@ -1,8 +1,8 @@
 package backend.academy.analyzer.service.parsers.impl;
 
 import backend.academy.analyzer.service.parsers.interfaces.DirectoryPathParser;
-import lombok.Getter;
 import java.nio.file.Path;
+import lombok.Getter;
 
 public class DirectoryPathParserImpl implements DirectoryPathParser {
 
@@ -34,7 +34,7 @@ public class DirectoryPathParserImpl implements DirectoryPathParser {
         return buildPath(splitPath, beginWildcardIndex, splitPath.length);
     }
 
-    private String buildPath(String[] splitPath,int startIndex, int stopIndex) {
+    private String buildPath(String[] splitPath, int startIndex, int stopIndex) {
         StringBuilder builder = new StringBuilder();
         for (int i = startIndex; i < splitPath.length; i++) {
             if (i == stopIndex) {
@@ -44,6 +44,6 @@ public class DirectoryPathParserImpl implements DirectoryPathParser {
             }
         }
 
-        return builder.delete(builder.length()-1, builder.length()).toString();
+        return builder.delete(builder.length() - 1, builder.length()).toString();
     }
 }
