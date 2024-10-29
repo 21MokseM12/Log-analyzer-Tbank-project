@@ -27,4 +27,8 @@ public class LogReport {
     private Map<String, Integer> popularResources;
 
     private Map<Integer, Integer> popularStatusCodes;
+
+    private Map<String, Integer> activeClientsIps;
+
+    private Map<String, Integer> popularUserAgents;
 }

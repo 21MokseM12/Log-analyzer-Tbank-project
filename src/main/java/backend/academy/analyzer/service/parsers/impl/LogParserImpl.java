@@ -36,8 +36,8 @@ public class LogParserImpl implements LogParser {
                     line[4],
                     Integer.parseInt(line[5]),
                     Integer.parseInt(line[6]),
-                    line[6],
-                    line[7]
+                    line[7],
+                    line[8]
                 );
             })
             .filter(log -> !log.timeLocal().isBefore(from) && !log.timeLocal().isAfter(to));
@@ -45,7 +45,21 @@ public class LogParserImpl implements LogParser {
 
     @Override
     public String parseLogRequestResource(String request) {
+        if (request.isBlank()) {
+            return "";
+        }
         String resource = request.split(" ")[1];
         return resource.substring(resource.lastIndexOf('/') + 1);
+    }
+
+    @Override
+    public String parseUserAgent(String userAgentData) {
+        String defaultUserAgent = "\"-\"";
+        if (userAgentData.isBlank() || userAgentData.equals(defaultUserAgent)) {
+            return defaultUserAgent.substring(1, userAgentData.length() - 1);
+        }
+        String userAgent = userAgentData.substring(1, userAgentData.length() - 1);
+        String[] splitUserAgent = userAgent.split("\\(");
+        return splitUserAgent[0].trim();
     }
 }

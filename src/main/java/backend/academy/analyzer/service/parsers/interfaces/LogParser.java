@@ -9,4 +9,6 @@ public interface LogParser {
     Stream<Log> parseToLog(Stream<String> logStrings, LocalDateTime from, LocalDateTime to);
 
     String parseLogRequestResource(String request);
+
+    String parseUserAgent(String userAgentData);
 }

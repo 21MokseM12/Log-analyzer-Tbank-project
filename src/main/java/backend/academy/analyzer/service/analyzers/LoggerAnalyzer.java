@@ -24,9 +24,13 @@ public class LoggerAnalyzer implements Analyzer {
 
     private long percentServerResponse;
 
-    Map<String, Integer> popularResources;
+    private Map<String, Integer> popularResources;
 
-    Map<Integer, Integer> popularStatusCodes;
+    private Map<Integer, Integer> popularStatusCodes;
+
+    private Map<String, Integer> activeClientsIps;
+
+    private Map<String, Integer> popularUserAgents;
 
     private final LogParser logParser;
 
@@ -41,16 +45,23 @@ public class LoggerAnalyzer implements Analyzer {
         List<Integer> percentileCandidates = new ArrayList<>();
         Map<String, Integer> resourcesMap = new HashMap<>();
         Map<Integer, Integer> statusCodesMap = new HashMap<>();
+        Map<String, Integer> clientIpMap = new HashMap<>();
+        Map<String, Integer> userAgentMap = new HashMap<>();
 
-        analyzeLogsSelection(logs, percentileCandidates, resourcesMap, statusCodesMap);
+        analyzeLogsSelection(logs, percentileCandidates,
+            resourcesMap, statusCodesMap,
+            clientIpMap, userAgentMap);
         calculateAvgServerResponse();
         calculatePercentServerResponse(percentileCandidates);
         sortResources(resourcesMap);
         sortStatusCodes(statusCodesMap);
+        sortActiveUsers(clientIpMap);
+        sortUserAgents(userAgentMap);
 
         return new LogReport(sources, from, to,
             logCount, avgServerResponse, percentServerResponse,
-            popularResources, popularStatusCodes);
+            popularResources, popularStatusCodes,
+            activeClientsIps, popularUserAgents);
     }
 
     private void initializeStates() {
@@ -59,11 +70,14 @@ public class LoggerAnalyzer implements Analyzer {
         this.percentServerResponse = 0;
         this.popularResources = new LinkedHashMap<>();
         this.popularStatusCodes = new LinkedHashMap<>();
+        this.activeClientsIps = new LinkedHashMap<>();
+        this.popularUserAgents = new LinkedHashMap<>();
     }
 
     private void analyzeLogsSelection(
         Stream<Log> logs, List<Integer> percentileCandidates,
-        Map<String, Integer> resourcesMap, Map<Integer, Integer> statusCodesMap
+        Map<String, Integer> resourcesMap, Map<Integer, Integer> statusCodesMap,
+        Map<String, Integer> clientIpMap, Map<String, Integer> userAgentMap
     ) {
         logs
             .forEach(log -> {
@@ -75,6 +89,12 @@ public class LoggerAnalyzer implements Analyzer {
 
                 int statusCode = log.httpStatus();
                 statusCodesMap.merge(statusCode, 1, Integer::sum);
+
+                String clientIp = log.remoteAddr();
+                clientIpMap.merge(clientIp, 1, Integer::sum);
+
+                String userAgent = logParser.parseUserAgent(log.httpUserAgent());
+                userAgentMap.merge(userAgent, 1, Integer::sum);
 
                 // Резервный отбор кандидатов для перцентиля
                 if (percentileCandidates.size() < Math.round(logCount * PERCENTIL_VALUE)) {
@@ -120,6 +140,38 @@ public class LoggerAnalyzer implements Analyzer {
             .entrySet()
             .stream()
             .sorted(Map.Entry.<Integer, Integer>comparingByValue().reversed())
+            .limit(TOP_LEVEL_VALUE)
+            .collect(
+                Collectors
+                    .toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1, LinkedHashMap::new
+                    )
+            );
+    }
+
+    private void sortActiveUsers(Map<String, Integer> clientIpmap) {
+        this.activeClientsIps = clientIpmap
+            .entrySet()
+            .stream()
+            .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+            .limit(TOP_LEVEL_VALUE)
+            .collect(
+                Collectors
+                    .toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1, LinkedHashMap::new
+                    )
+            );
+    }
+
+    private void sortUserAgents(Map<String, Integer> userAgentMap) {
+        this.popularUserAgents = userAgentMap
+            .entrySet()
+            .stream()
+            .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
             .limit(TOP_LEVEL_VALUE)
             .collect(
                 Collectors
