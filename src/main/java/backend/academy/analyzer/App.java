@@ -13,7 +13,7 @@ import java.util.Map;
 @SuppressWarnings("uncommentedmain")
 public final class App {
 
-    private static final String REPORT_FILE_PATTERN = "./src/test/resources/reports/report.";
+    private static final String REPORT_FILE_PATTERN = "./src/test/resources/reports/report";
 
     private static final PrintFormat DEFAULT_FORMAT_VALUE = PrintFormat.MARKDOWN;
 

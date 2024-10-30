@@ -3,7 +3,7 @@ package backend.academy.analyzer.enums;
 import lombok.Getter;
 
 public enum PrintFormat {
-    MARKDOWN("markdown", "md"), ADOC("adoc", "adoc");
+    MARKDOWN("markdown", ".md"), ADOC("adoc", ".adoc");
 
     private final String format;
 
