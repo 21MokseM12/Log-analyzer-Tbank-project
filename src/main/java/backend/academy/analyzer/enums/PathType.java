@@ -26,7 +26,7 @@ public enum PathType {
                 if (Files.exists(localPath)) {
                     return PathType.LOCAL;
                 } else {
-                    throw new InvalidPathException("Указанный путь не путь к конкретному файлу", "");
+                    throw new InvalidPathException("Указанный путь - не путь к конкретному файлу", "");
                 }
             } catch (InvalidPathException invalidPathException) {
                 try {

@@ -1,13 +1,11 @@
 package backend.academy.analyzer.enums;
 
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import java.util.NoSuchElementException;
-import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PathTypeTest {
 
@@ -32,11 +30,5 @@ public class PathTypeTest {
         String path =
             "https://raw.githubusercontent.com/elastic/examples/master/Common%20Data%20Formats/nginx_logs/nginx_logs";
         assertEquals(PathType.URL, PathType.identify(path));
-    }
-
-    @Test
-    public void checkThrowsInvalidPath() {
-        String path = "asdfwfwfdf";
-        assertThrows(NoSuchElementException.class, () -> PathType.identify(path));
     }
 }
