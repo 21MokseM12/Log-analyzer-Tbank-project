@@ -2,8 +2,11 @@ package backend.academy.analyzer.enums;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
+import java.nio.file.PathMatcher;
 import java.nio.file.Paths;
 import java.util.NoSuchElementException;
 
@@ -18,11 +21,20 @@ public enum PathType {
             }
             throw new URISyntaxException(uri.toString(), "Path is not URI");
         } catch (URISyntaxException e) {
-            Path localPath = Paths.get(path);
-            if (Files.exists(localPath)) {
-                return PathType.LOCAL;
-            } else {
-                throw new NoSuchElementException("Указанный путь не найден");
+            try {
+                Path localPath = Paths.get(path);
+                if (Files.exists(localPath)) {
+                    return PathType.LOCAL;
+                } else {
+                    throw new NoSuchElementException("Указанный путь не найден");
+                }
+            } catch (InvalidPathException e2) {
+                try {
+                    PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:" + path);
+                    return PathType.LOCAL;
+                } catch (IllegalArgumentException exception) {
+                    throw new NoSuchElementException();
+                }
             }
         }
     }
