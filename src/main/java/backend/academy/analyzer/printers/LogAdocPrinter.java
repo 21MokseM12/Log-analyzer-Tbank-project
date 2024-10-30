@@ -3,7 +3,6 @@ package backend.academy.analyzer.printers;
 import backend.academy.analyzer.enums.HttpStatusCodes;
 import backend.academy.analyzer.enums.ReportTopic;
 import backend.academy.analyzer.model.LogReport;
-import java.time.LocalDateTime;
 import java.util.Map;
 
 public class LogAdocPrinter extends LogPrinter {
@@ -32,19 +31,7 @@ public class LogAdocPrinter extends LogPrinter {
     @Override
     String generalTable(LogReport report) {
         StringBuilder builder = new StringBuilder();
-
-        String resourceNames = report.sourceName().toString();
-        String from = super.getTimeOrDefault(report.from(), LocalDateTime.MIN);
-        String to = super.getTimeOrDefault(report.to(), LocalDateTime.MAX);
-
-        String[][] rows = new String[][] {
-            {ReportTopic.INPUT_RESOURCES_NAME.toString(), resourceNames},
-            {ReportTopic.BEGIN_DATE.toString(), from},
-            {ReportTopic.END_DATE.toString(), to},
-            {ReportTopic.LOG_COUNT.toString(), String.valueOf(report.logCount())},
-            {ReportTopic.AVG_SERVER_RESPONSE.toString(), String.valueOf(report.avgServerResponse())},
-            {ReportTopic.PERCENT_SERVER_RESPONSE.toString(), String.valueOf(report.percentServerResponse())}
-        };
+        String[][] rows = getGeneralTableRows(report);
 
         builder.append(tableLabel(ReportTopic.GENERAL_INFO_LABEL))
             .append(TABLE_START)
