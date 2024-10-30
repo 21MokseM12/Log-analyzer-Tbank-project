@@ -1,6 +1,9 @@
 package backend.academy.analyzer.service.readers;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -8,26 +11,24 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class LogLocalFileReaderTest {
 
-    private static final String CORRECT_PATH_TO_SINGLE_FILE =
-        "./src/test/resources/logs/logs.txt";
-
-    private static final String CORRECT_PATH_TO_MULTIPLE_FILES =
-        "./src/test/resources/logs/2024*.txt";
+    private static Stream<Arguments> validPathPatterns() {
+        return Stream.of(
+            Arguments.of("./src/test/resources/logs/logs.txt"),
+            Arguments.of("./src/test/resources/logs/log*"),
+            Arguments.of("./src/test/resources/**/targetLogs.txt"),
+            Arguments.of("./src/test/**/?ogs*")
+        );
+    }
 
     private static final String INVALID_PATH = "./src/test/resources/log/log.txt";
 
+
     private final LogReader reader = new LogLocalFileReader();
 
-    @Test
-    public void checkReadAllLogsSuccess() {
-        Stream<String> stream = reader.read(CORRECT_PATH_TO_SINGLE_FILE);
-        assertTrue(stream.findAny().isPresent());
-    }
-
-    @Test
-    public void checkReadMultipleFilesByWildCardSuccess() {
-        Stream<String> stream = reader.read(CORRECT_PATH_TO_MULTIPLE_FILES);
-        assertTrue(stream.findAny().isPresent());
+    @ParameterizedTest
+    @MethodSource("validPathPatterns")
+    public void checkReadDataMethod(String path) {
+        assertTrue(reader.read(path).findAny().isPresent());
     }
 
     @Test
