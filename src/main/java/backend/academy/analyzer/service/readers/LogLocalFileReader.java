@@ -46,10 +46,10 @@ public class LogLocalFileReader implements LogReader {
     }
 
     private String createRegexPattern(String path) {
-        path = path.replace("**", "");
-        path = path.replace("*", "[^/]*");
-        path = path.replace("?", ".");
-        return path;
+        return path
+            .replace("**", "")
+            .replace("*", "[^/]*")
+            .replace("?", ".");
     }
 
     private Stream<String> findDataByFilePath(String stringPath) throws IOException {

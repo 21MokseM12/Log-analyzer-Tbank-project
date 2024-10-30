@@ -31,7 +31,7 @@ public class DirectoryPathParserImpl implements DirectoryPathParser {
     }
 
     public String getFileNamePattern() {
-        return buildPath(splitPath, splitPath.length-1, splitPath.length);
+        return buildPath(splitPath, splitPath.length - 1, splitPath.length);
     }
 
     private String buildPath(String[] splitPath, int startIndex, int stopIndex) {

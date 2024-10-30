@@ -28,7 +28,7 @@ public enum PathType {
                 } else {
                     throw new NoSuchElementException("Указанный путь не найден");
                 }
-            } catch (InvalidPathException e2) {
+            } catch (InvalidPathException invalidPathException) {
                 try {
                     PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:" + path);
                     return PathType.LOCAL;

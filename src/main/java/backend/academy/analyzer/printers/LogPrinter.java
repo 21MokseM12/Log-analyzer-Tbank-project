@@ -36,7 +36,7 @@ public abstract class LogPrinter {
 
     protected String[][] getGeneralTableRows(LogReport report) {
         String resourceNames = report.sourceName().toString();
-        resourceNames = resourceNames.substring(1, resourceNames.length()-1);
+        resourceNames = resourceNames.substring(1, resourceNames.length() - 1);
         String from = getTimeOrDefault(report.from(), LocalDateTime.MIN);
         String to = getTimeOrDefault(report.to(), LocalDateTime.MAX);
 

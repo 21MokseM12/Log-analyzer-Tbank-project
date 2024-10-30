@@ -50,9 +50,9 @@ public class ResourceParserImpl implements ResourceParser {
     }
 
     private String getRegexPattern(String path) {
-        path = path.replace("**", "");
-        path = path.replace("*", "[^/]*");
-        path = path.replace("?", ".");
-        return path;
+        return path
+            .replace("**", "")
+            .replace("*", "[^/]*")
+            .replace("?", ".");
     }
 }
