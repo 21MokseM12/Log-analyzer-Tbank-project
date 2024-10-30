@@ -6,7 +6,6 @@ import backend.academy.analyzer.model.LogReport;
 import java.time.LocalDateTime;
 import java.util.Map;
 
-//todo подумать, нужны ли два класса или объединить все в один
 public class LogAdocPrinter extends LogPrinter {
 
     private static final String HEAD_DESIGNATION = "==== ";
