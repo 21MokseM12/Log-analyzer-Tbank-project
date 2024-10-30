@@ -6,5 +6,5 @@ public interface DirectoryPathParser {
 
     Path getParentDirectory();
 
-    String getPathPattern();
+    String getFileNamePattern();
 }
