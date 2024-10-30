@@ -48,8 +48,8 @@ public class LogParserImplTest {
     @Test
     public void checkParseLogInTimeRangeSuccess() {
         assertTrue(parser.parseToLog(reader.read(PATH),
-                LocalDateTime.of(2015, 5, 17, 8, 0, 0),
-                LocalDateTime.of(2015, 5, 17, 10, 0, 0)
+                LocalDateTime.of(2015, 5, 22, 2, 0, 0),
+                LocalDateTime.of(2015, 5, 23, 10, 0, 0)
             )
             .findAny()
             .isPresent());
@@ -58,8 +58,8 @@ public class LogParserImplTest {
     @Test
     public void checkParseExactlyOneLog() {
         assertTrue(parser.parseToLog(reader.read(PATH),
-                LocalDateTime.of(2015, 5, 17, 8, 5, 45),
-                LocalDateTime.of(2015, 5, 17, 8, 5, 45)
+                LocalDateTime.of(2015, 5, 22, 2, 5, 0),
+                LocalDateTime.of(2015, 5, 22, 2, 5, 0)
             )
             .findAny()
             .isPresent());
@@ -78,12 +78,14 @@ public class LogParserImplTest {
     @Test
     public void checkCorrectLogConverting() {
         List<Log> logs = parser.parseToLog(reader.read(PATH),
-            LocalDateTime.of(2015, 5, 17, 8, 5, 45),
-            LocalDateTime.of(2015, 5, 17, 8, 5, 45))
+            LocalDateTime.of(2015, 5, 22, 2, 5, 0),
+            LocalDateTime.of(2015, 5, 22, 2, 5, 0))
             .toList();
-        List<Log> result = List.of(new Log("46.4.66.76", "-",
-            LocalDateTime.of(2015, 5, 17, 8, 5, 45), "\"GET /downloads/product_1 HTTP/1.1\"",
-            404, 318, "\"-\"", "\"Debian APT-HTTP/1.3 (1.0.1ubuntu2)\""));
+
+        List<Log> result = List.of(new Log("184.168.128.52", "-",
+            LocalDateTime.of(2015, 5, 22, 2, 5, 0), "\"GET /downloads/product_2 HTTP/1.1\"",
+            200, 951, "\"-\"", "\"urlgrabber/3.9.1 yum/3.2.29\""));
+
         assertEquals(result, logs);
     }
 
