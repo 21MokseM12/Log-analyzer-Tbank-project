@@ -3,7 +3,6 @@ package backend.academy.analyzer.service.parsers.impl;
 import backend.academy.analyzer.enums.PathType;
 import backend.academy.analyzer.service.parsers.interfaces.ResourceParser;
 import java.io.IOException;
-import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -23,22 +22,20 @@ public class ResourceParserImpl implements ResourceParser {
     }
 
     private List<String> parseLocalFileResourceNames(String stringPath) {
-        List<String> resourceNames = new ArrayList<>();
         try {
             DirectoryPathParserImpl directoryParser = new DirectoryPathParserImpl(stringPath);
             if (directoryParser.beginWildcardIndex() != -1) {
                 Path parent = directoryParser.getParentDirectory();
-                try (DirectoryStream<Path> directoryStream =
-                         Files.newDirectoryStream(parent, directoryParser.getPathPattern())) {
-                    for (Path entry : directoryStream) {
-                        resourceNames.add(entry.getFileName().toString());
-                    }
-                }
-            } else {
-                resourceNames.add(stringPath.substring(stringPath.lastIndexOf("/") + 1));
-            }
+                String pattern = getRegexPattern(directoryParser.getFileNamePattern());
 
-            return resourceNames;
+                return Files.walk(parent)
+                    .filter(path -> !Files.isDirectory(path))
+                    .filter(path -> path.getFileName().toString().matches(pattern))
+                    .map(path -> path.getFileName().toString())
+                    .toList();
+            } else {
+                return List.of(stringPath.substring(stringPath.lastIndexOf("/") + 1));
+            }
         } catch (IOException e) {
             log.error("Указанный локальный путь не был найден", e);
             throw new NoSuchElementException();
@@ -50,5 +47,12 @@ public class ResourceParserImpl implements ResourceParser {
         String[] splitPath = stringPath.split("/");
         pathNames.add(splitPath[splitPath.length - 1]);
         return pathNames;
+    }
+
+    private String getRegexPattern(String path) {
+        path = path.replace("**", "");
+        path = path.replace("*", "[^/]*");
+        path = path.replace("?", ".");
+        return path;
     }
 }
