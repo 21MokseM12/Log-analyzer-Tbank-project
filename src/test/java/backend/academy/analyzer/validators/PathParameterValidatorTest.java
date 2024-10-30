@@ -50,7 +50,10 @@ public class PathParameterValidatorTest {
         return Stream.of(
             Arguments.of("./src/resources/logs/2024*"),
             Arguments.of("/src/test/resources/logs/logs*"),
-            Arguments.of("/src/test/resources/logs/*.txt")
+            Arguments.of("/src/test/resources/logs/*.txt"),
+            Arguments.of("/src/test/**/logs/*.txt"),
+            Arguments.of("/src/test/?esources/**/*.txt"),
+            Arguments.of("/src/test/re?ources/**/logs*.txt")
         );
     }
 
