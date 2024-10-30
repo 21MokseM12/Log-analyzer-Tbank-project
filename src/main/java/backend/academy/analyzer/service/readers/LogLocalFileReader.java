@@ -1,8 +1,8 @@
 package backend.academy.analyzer.service.readers;
 
 import backend.academy.analyzer.service.parsers.impl.DirectoryPathParserImpl;
+import backend.academy.analyzer.service.parsers.interfaces.DirectoryPathParser;
 import java.io.IOException;
-import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.NoSuchElementException;
@@ -17,21 +17,42 @@ public class LogLocalFileReader implements LogReader {
         try {
             DirectoryPathParserImpl directoryParser = new DirectoryPathParserImpl(stringPath);
             if (directoryParser.beginWildcardIndex() != -1) {
-                Path parent = directoryParser.getParentDirectory();
-                Stream<String> readLines = Stream.empty();
-                try (DirectoryStream<Path> directoryStream =
-                         Files.newDirectoryStream(parent, directoryParser.getPathPattern())) {
-                    for (Path entry : directoryStream) {
-                        readLines = Stream.concat(readLines, Files.readAllLines(entry).stream());
-                    }
-                    return readLines;
-                }
+                return findDataByFilePatternPath(directoryParser);
             } else {
-                return Files.readAllLines(Path.of(stringPath)).stream();
+                return findDataByFilePath(stringPath);
             }
         } catch (IOException e) {
             log.error("Указанный локальный путь не был найден", e);
             throw new NoSuchElementException();
         }
+    }
+
+    private Stream<String> findDataByFilePatternPath(DirectoryPathParser parser)
+        throws IOException {
+        Path parent = parser.getParentDirectory();
+        String regexPattern = createRegexPattern(parser.getFileNamePattern());
+
+        return Files.walk(parent)
+            .filter(path -> !Files.isDirectory(path))
+            .filter(path -> path.getFileName().toString().matches(regexPattern))
+            .flatMap(p -> {
+                try {
+                    return Files.readAllLines(p).stream();
+                } catch (IOException e) {
+                    log.error("Ошибка чтения файла: {}", p, e);
+                    return Stream.empty();
+                }
+            });
+    }
+
+    private String createRegexPattern(String path) {
+        path = path.replace("**", "");
+        path = path.replace("*", "[^/]*");
+        path = path.replace("?", ".");
+        return path;
+    }
+
+    private Stream<String> findDataByFilePath(String stringPath) throws IOException {
+        return Files.readAllLines(Path.of(stringPath)).stream();
     }
 }
