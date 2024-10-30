@@ -6,11 +6,14 @@ import backend.academy.analyzer.model.LogReport;
 import java.time.LocalDateTime;
 import java.util.Map;
 
-public class LogAdocPrinter implements LogPrinter {
-
-    private static final String REPORT_PATH = "./src/test/resources/reports/report.adoc";
+//todo подумать, нужны ли два класса или объединить все в один
+public class LogAdocPrinter extends LogPrinter {
 
     private static final String HEAD_DESIGNATION = "==== ";
+
+    private static final String DOUBLE_PATTERN = "| %-30s | %-30s |";
+
+    private static final String TRIPLE_PATTERN = "| %-25s | %-25s | %-25s |";
 
     private static final String TABLE_START = """
         [cols="a,a", options="header"]
@@ -19,102 +22,123 @@ public class LogAdocPrinter implements LogPrinter {
 
     private static final String TABLE_END = "|===";
 
-    private static final String TABLE_DELIMITER = "|";
-
     private static final String DOUBLE_NEW_LINE = "\n\n";
 
+    private static final String NEW_LINE = "\n";
+
+    public LogAdocPrinter(String reportPath) {
+        super(reportPath);
+    }
+
     @Override
-    public void print(LogReport report) {
-        String formattedReport = formatToAdoc(report);
-        this.printConsole(formattedReport);
-        this.printFile(formattedReport, REPORT_PATH);
-    }
+    String generalTable(LogReport report) {
+        StringBuilder builder = new StringBuilder();
 
-    private String formatToAdoc(LogReport report) {
-        StringBuilder formattedReport = new StringBuilder();
-        addGeneralTable(formattedReport, report);
-        addResourceTable(formattedReport, report);
-        addStatusCodeTable(formattedReport, report);
-
-        return formattedReport.toString();
-    }
-
-    private void addGeneralTable(StringBuilder formattedReport, LogReport report) {
         String resourceNames = report.sourceName().toString();
-        String from = report.from().equals(LocalDateTime.MIN) ? "-" : report.from().toString();
-        String to = report.to().equals(LocalDateTime.MAX) ? "-" : report.to().toString();
+        String from = super.getTimeOrDefault(report.from(), LocalDateTime.MIN);
+        String to = super.getTimeOrDefault(report.to(), LocalDateTime.MAX);
 
-        formattedReport.append(HEAD_DESIGNATION).append(ReportTopic.GENERAL_INFO_LABEL)
-            .append(DOUBLE_NEW_LINE);
-        formattedReport.append(TABLE_START);
-        addFirstRowToLabel(formattedReport, ReportTopic.METRIC, ReportTopic.MEANING);
-        addRowToTable(formattedReport, ReportTopic.INPUT_RESOURCES_NAME.toString(),
-            resourceNames.substring(1, resourceNames.length() - 1));
-        addRowToTable(formattedReport, ReportTopic.BEGIN_DATE.toString(), from);
-        addRowToTable(formattedReport, ReportTopic.END_DATE.toString(), to);
-        addRowToTable(formattedReport, ReportTopic.LOG_COUNT.toString(),
-            String.valueOf(report.logCount()));
-        addRowToTable(formattedReport, ReportTopic.AVG_SERVER_RESPONSE.toString(),
-            String.valueOf(report.avgServerResponse()));
-        addRowToTable(formattedReport, ReportTopic.PERCENT_SERVER_RESPONSE.toString(),
-            String.valueOf(report.percentServerResponse()));
-        formattedReport.append(TABLE_END).append(DOUBLE_NEW_LINE);
-    }
+        String[][] rows = new String[][] {
+            {ReportTopic.INPUT_RESOURCES_NAME.toString(), resourceNames},
+            {ReportTopic.BEGIN_DATE.toString(), from},
+            {ReportTopic.END_DATE.toString(), to},
+            {ReportTopic.LOG_COUNT.toString(), String.valueOf(report.logCount())},
+            {ReportTopic.AVG_SERVER_RESPONSE.toString(), String.valueOf(report.avgServerResponse())},
+            {ReportTopic.PERCENT_SERVER_RESPONSE.toString(), String.valueOf(report.percentServerResponse())}
+        };
 
-    private void addResourceTable(StringBuilder formattedReport, LogReport report) {
-        formattedReport.append(HEAD_DESIGNATION).append(ReportTopic.GENERAL_MOST_POPULAR_RESOURCES_LABEL)
-            .append(DOUBLE_NEW_LINE);
-        formattedReport.append(TABLE_START);
-        addFirstRowToLabel(formattedReport, ReportTopic.RESOURCE_NAME, ReportTopic.COUNT);
-        for (Map.Entry<String, Integer> entry : report.popularResources().entrySet()) {
-            addRowToTable(formattedReport, String.valueOf(entry.getKey()), String.valueOf(entry.getValue()));
+        builder.append(tableLabel(ReportTopic.GENERAL_INFO_LABEL))
+            .append(TABLE_START)
+            .append(rowTableByPattern(DOUBLE_PATTERN, ReportTopic.METRIC.toString(), ReportTopic.MEANING.toString()));
+        for (String[] row : rows) {
+            builder.append(rowTableByPattern(DOUBLE_PATTERN, row[0], row[1]));
         }
-        formattedReport.append(TABLE_END).append(DOUBLE_NEW_LINE);
+        builder.append(TABLE_END).append(DOUBLE_NEW_LINE);
+        return builder.toString();
     }
 
-    private void addStatusCodeTable(StringBuilder formattedReport, LogReport report) {
-        formattedReport.append(HEAD_DESIGNATION).append(ReportTopic.GENERAL_MOST_POPULAR_STATUS_CODES_LABEL)
-            .append(DOUBLE_NEW_LINE);
-        formattedReport.append(TABLE_START);
-        addFirstRowToLabel(formattedReport, ReportTopic.STATUS_CODE_VALUE, ReportTopic.STATUS_CODE_NAME,
-            ReportTopic.COUNT);
+    @Override
+    String resourceTable(LogReport report) {
+        StringBuilder builder = new StringBuilder();
+
+        builder
+            .append(tableLabel(ReportTopic.GENERAL_MOST_POPULAR_RESOURCES_LABEL))
+            .append(TABLE_START)
+            .append(rowTableByPattern(DOUBLE_PATTERN,
+                ReportTopic.RESOURCE_NAME.toString(), ReportTopic.COUNT.toString()));
+
+        for (Map.Entry<String, Integer> entry : report.popularResources().entrySet()) {
+            builder.append(rowTableByPattern(DOUBLE_PATTERN,
+                String.valueOf(entry.getKey()), String.valueOf(entry.getValue())));
+        }
+        builder.append(TABLE_END).append(DOUBLE_NEW_LINE);
+        return builder.toString();
+    }
+
+    @Override
+    String statusCodeTable(LogReport report) {
+        StringBuilder builder = new StringBuilder();
+
+        builder
+            .append(tableLabel(ReportTopic.GENERAL_MOST_POPULAR_STATUS_CODES_LABEL))
+            .append(TABLE_START)
+            .append(rowTableByPattern(TRIPLE_PATTERN,
+                ReportTopic.STATUS_CODE_VALUE.toString(), ReportTopic.STATUS_CODE_NAME.toString(),
+                ReportTopic.COUNT.toString()));
 
         for (Map.Entry<Integer, Integer> entry : report.popularStatusCodes().entrySet()) {
-            addRowToTable(formattedReport, String.valueOf(entry.getKey()),
-                HttpStatusCodes.getStatusFromCode(entry.getKey()).toString(),
-                String.valueOf(entry.getValue()));
+            builder.append(rowTableByPattern(TRIPLE_PATTERN,
+                String.valueOf(entry.getKey()),
+                HttpStatusCodes.getStatusFromCode(entry.getKey()),
+                String.valueOf(entry.getValue())));
         }
-        formattedReport.append(TABLE_END).append(DOUBLE_NEW_LINE);
+        builder.append(TABLE_END).append(DOUBLE_NEW_LINE);
+        return builder.toString();
     }
 
-    private void addFirstRowToLabel(StringBuilder builder, ReportTopic firstTopic, ReportTopic secondTopic) {
-        builder.append(TABLE_DELIMITER).append(firstTopic)
-            .append(TABLE_DELIMITER).append(secondTopic)
-            .append(TABLE_DELIMITER).append("\n");
+    @Override
+    String activeUserIpsTable(LogReport report) {
+        StringBuilder builder = new StringBuilder();
+
+        builder
+            .append(tableLabel(ReportTopic.GENERAL_ACTIVE_USER_IPS))
+            .append(TABLE_START)
+            .append(rowTableByPattern(DOUBLE_PATTERN,
+                ReportTopic.USER_IP_LABEL.toString(), ReportTopic.COUNT.toString()));
+
+        for (Map.Entry<String, Integer> entry : report.activeClientsIps().entrySet()) {
+            builder.append(rowTableByPattern(DOUBLE_PATTERN,
+                String.valueOf(entry.getKey()),
+                String.valueOf(entry.getValue())));
+        }
+        builder.append(TABLE_END).append(DOUBLE_NEW_LINE);
+        return builder.toString();
     }
 
-    private void addFirstRowToLabel(
-        StringBuilder builder,
-        ReportTopic firstTopic,
-        ReportTopic secondTopic,
-        ReportTopic thirdTopic
-    ) {
-        builder.append(TABLE_DELIMITER).append(firstTopic)
-            .append(TABLE_DELIMITER).append(secondTopic)
-            .append(TABLE_DELIMITER).append(thirdTopic)
-            .append(TABLE_DELIMITER).append("\n");
+    @Override
+    String userAgentsTable(LogReport report) {
+        StringBuilder builder = new StringBuilder();
+
+        builder
+            .append(tableLabel(ReportTopic.GENERAL_MOST_POPULAR_USER_AGENTS))
+            .append(TABLE_START)
+            .append(rowTableByPattern(DOUBLE_PATTERN,
+                ReportTopic.USER_AGENT_LABEL.toString(), ReportTopic.COUNT.toString()));
+
+        for (Map.Entry<String, Integer> entry : report.popularUserAgents().entrySet()) {
+            builder.append(rowTableByPattern(DOUBLE_PATTERN,
+                String.valueOf(entry.getKey()),
+                String.valueOf(entry.getValue())));
+        }
+        builder.append(TABLE_END).append(DOUBLE_NEW_LINE);
+        return builder.toString();
     }
 
-    private void addRowToTable(StringBuilder builder, String firstValue, String secondValue) {
-        builder.append(TABLE_DELIMITER).append(firstValue)
-            .append(TABLE_DELIMITER).append(secondValue)
-            .append(TABLE_DELIMITER).append("\n");
+    private String tableLabel(ReportTopic topic) {
+        return HEAD_DESIGNATION.concat(topic.toString().concat(DOUBLE_NEW_LINE));
     }
 
-    private void addRowToTable(StringBuilder builder, String firstValue, String secondValue, String thirdValue) {
-        builder.append(TABLE_DELIMITER).append(firstValue)
-            .append(TABLE_DELIMITER).append(secondValue)
-            .append(TABLE_DELIMITER).append(thirdValue)
-            .append(TABLE_DELIMITER).append("\n");
+    private String rowTableByPattern(String pattern, Object... params) {
+        return String.format(pattern, params).concat(NEW_LINE);
     }
 }

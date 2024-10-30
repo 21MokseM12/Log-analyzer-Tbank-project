@@ -30,6 +30,14 @@ public enum ReportTopic {
 
     STATUS_CODE_NAME("Имя"),
 
+    GENERAL_ACTIVE_USER_IPS("Самые часто встречаемые IP адреса пользователей"),
+
+    USER_IP_LABEL("IP адрес"),
+
+    GENERAL_MOST_POPULAR_USER_AGENTS("Самые часто встречаемые user-agent"),
+
+    USER_AGENT_LABEL("user-agent"),
+
     COUNT("Количество");
 
     private final String topic;

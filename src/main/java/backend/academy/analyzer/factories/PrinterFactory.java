@@ -11,12 +11,12 @@ public class PrinterFactory {
 
     private final Map<PrintFormat, LogPrinter> printers = new HashMap<>();
 
-    public PrinterFactory() {
+    public PrinterFactory(String reportFilePattern) {
         for (PrintFormat format : PrintFormat.values()) {
             if (format.equals(PrintFormat.MARKDOWN)) {
-                printers.put(format, new LogMarkdownPrinter());
+                printers.put(format, new LogMarkdownPrinter(reportFilePattern.concat(format.fileType())));
             } else if (format.equals(PrintFormat.ADOC)) {
-                printers.put(format, new LogAdocPrinter());
+                printers.put(format, new LogAdocPrinter(reportFilePattern.concat(format.fileType())));
             }
         }
     }

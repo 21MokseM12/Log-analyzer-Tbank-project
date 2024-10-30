@@ -13,6 +13,8 @@ import java.util.Map;
 @SuppressWarnings("uncommentedmain")
 public final class App {
 
+    private static final String REPORT_FILE_PATTERN = "./src/test/resources/reports/report.";
+
     private static final PrintFormat DEFAULT_FORMAT_VALUE = PrintFormat.MARKDOWN;
 
     private static final Map<ParameterType, String> ARGUMENT_MAP = new HashMap<>();
@@ -21,7 +23,7 @@ public final class App {
 
     private static final LogReportCreator LOG_REPORT_CREATOR = new LogReportCreatorImpl();
 
-    private static final PrinterFactory PRINTER_FACTORY = new PrinterFactory();
+    private static final PrinterFactory PRINTER_FACTORY = new PrinterFactory(REPORT_FILE_PATTERN);
 
     private App() {
     }
