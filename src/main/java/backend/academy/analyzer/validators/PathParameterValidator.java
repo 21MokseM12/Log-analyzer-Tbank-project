@@ -41,27 +41,22 @@ public class PathParameterValidator implements ParameterValidator {
         }
     }
 
-    private boolean isValidPathPattern(String input) {
-
-        // Регулярное выражение для проверки наличия символов "*" или "?"
-        String regex = ".*[?*].*";
-        boolean first = Pattern.matches(regex, input);
-
-        try {
-            // Пытаемся создать PathMatcher в формате glob для строки
-            PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:" + input);
-            return first;
-        } catch (IllegalArgumentException e) {
-            // Если выбрасывается исключение, строка не является шаблоном
-            return false;
-        }
-    }
-
     private boolean isValidLocalPath(String input) {
         try {
             Path path = Paths.get(input);
             return Files.exists(path) && Files.isRegularFile(path);
         } catch (InvalidPathException e) {
+            return false;
+        }
+    }
+
+    private boolean isValidPathPattern(String input) {
+        String regex = ".*[?*].*";
+        boolean first = Pattern.matches(regex, input);
+        try {
+            PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:" + input);
+            return first;
+        } catch (IllegalArgumentException e) {
             return false;
         }
     }

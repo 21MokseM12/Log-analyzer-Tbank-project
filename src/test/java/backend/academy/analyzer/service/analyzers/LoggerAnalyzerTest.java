@@ -29,12 +29,14 @@ public class LoggerAnalyzerTest {
         Map<Integer, Integer> statusCodes = Map.of(304, 8, 404, 4, 200, 1);
         Map<String, Integer> clientIps = Map.of("93.180.71.3", 2, "46.4.66.76", 2, "80.91.33.133", 2);
         Map<String, Integer> userAgents = Map.of("Debian APT-HTTP/1.3", 12, "Go 1.1 package http", 1);
+
         LogReport firstResult = new LogReport(List.of("sources"), LocalDateTime.MIN, LocalDateTime.MAX,
             13, 138, 340,
             resources, statusCodes, clientIps, userAgents);
         LogReport secondResult = new LogReport(List.of("sources"), LocalDateTime.MIN, LocalDateTime.MAX,
             13, 138, 324,
             resources, statusCodes, clientIps, userAgents);
+
         Stream<Log> logs = logParser.parseToLog(reader.read(PATH), LocalDateTime.MIN, LocalDateTime.MAX);
         LogReport report = analyzer.analyze(logs, List.of("sources"), LocalDateTime.MIN, LocalDateTime.MAX);
         assertTrue(report.equals(firstResult) || report.equals(secondResult));
