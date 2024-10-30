@@ -15,7 +15,9 @@ public class PathTypeTest {
         return Stream.of(
             Arguments.of("./src/test/resources/logs/logs*"),
             Arguments.of("./src/test/resources/logs/logs.txt"),
-            Arguments.of("./src/test/**/targetLogs.txt")
+            Arguments.of("./src/test/**/targetLogs.txt"),
+            Arguments.of("./src/test/**/log*"),
+            Arguments.of("./src/test/**/?ogs*")
         );
     }
 
