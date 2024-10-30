@@ -2,23 +2,27 @@ package backend.academy.analyzer.service.parsers.impl;
 
 import backend.academy.analyzer.enums.PathType;
 import backend.academy.analyzer.service.parsers.interfaces.ResourceParser;
-import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Stream;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ResourceParserImplTest {
 
-    private static final String LOCAL_PATH =
-        "./src/test/resources/logs/logs.txt";
-
-    private static final String LOCAL_PATH_PATTERN_FOR_SINGLE_FILE =
-        "./src/test/resources/logs/2024*.txt";
-
-    private static final String LOCAL_PATH_PATTERN_FOR_MULTIPLE_FILE =
-        "./src/test/resources/logs/logs*.txt";
+    private static Stream<Arguments> validLocalPathPatterns() {
+        return Stream.of(
+            Arguments.of("./src/test/resources/logs/logs.txt", List.of("logs.txt")),
+            Arguments.of("./src/test/resources/logs/2024*", List.of("2024example.txt")),
+            Arguments.of("./src/test/resources/logs/logs*", List.of("logs.txt", "logs2.txt")),
+            Arguments.of("./src/test/resources/**/targetLogs.txt", List.of("targetLogs.txt")),
+            Arguments.of("./src/test/**/?ogs*", List.of("logs.txt", "logs2.txt"))
+        );
+    }
 
     private static final String INVALID_LOCAL_PATH = "./hello/world*";
 
@@ -27,22 +31,10 @@ public class ResourceParserImplTest {
 
     private final ResourceParser parser = new ResourceParserImpl();
 
-    @Test
-    public void checkValidParseResourceNameByLocalPath() {
-        assertEquals(List.of("logs.txt"), parser.parsePathResourceName(PathType.LOCAL, LOCAL_PATH));
-    }
-
-    @Test
-    public void checkValidParseResourceNameByLocalPathPatternSingleFile() {
-        assertEquals(List.of("2024example.txt"), parser.parsePathResourceName(PathType.LOCAL, LOCAL_PATH_PATTERN_FOR_SINGLE_FILE));
-    }
-
-    @Test
-    public void checkValidParseResourceNameByLocalPathPatternMultipleFile() {
-        List<String> firstNameVariant = List.of("logs.txt", "logs2.txt");
-        List<String> secondNameVariant = List.of("logs2.txt", "logs.txt");
-        List<String> result = parser.parsePathResourceName(PathType.LOCAL, LOCAL_PATH_PATTERN_FOR_MULTIPLE_FILE);
-        assertTrue(result.equals(firstNameVariant) || result.equals(secondNameVariant));
+    @ParameterizedTest
+    @MethodSource("validLocalPathPatterns")
+    public void checkValidParseResourceNames(String path, List<String> expected) {
+        assertEquals(expected, parser.parsePathResourceName(PathType.LOCAL, path).stream().sorted().toList());
     }
 
     @Test
