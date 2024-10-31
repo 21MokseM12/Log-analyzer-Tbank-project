@@ -2,7 +2,6 @@ package backend.academy.analyzer.service.parsers.impl;
 
 import backend.academy.analyzer.model.Log;
 import backend.academy.analyzer.service.parsers.interfaces.LogParser;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -16,7 +15,7 @@ public class LogParserImpl implements LogParser {
     private static final int MAX_SPLIT_LOG_LENGTH = 8;
 
     @Override
-    public Stream<Log> parseToLog(Stream<String> logStrings, LocalDateTime from, LocalDateTime to) {
+    public Stream<Log> parseToLog(Stream<String> logStrings) {
         DateTimeFormatter inputTimeFormat = DateTimeFormatter.ofPattern("dd/MMM/yyyy:HH:mm:ss Z", Locale.US);
 
         return logStrings
@@ -39,12 +38,11 @@ public class LogParserImpl implements LogParser {
                     line[7],
                     line[8]
                 );
-            })
-            .filter(log -> !log.timeLocal().isBefore(from) && !log.timeLocal().isAfter(to));
+            });
     }
 
     @Override
-    public String parseLogRequestResource(String request) {
+    public String parseLogRequestResourceName(String request) {
         if (request.isBlank()) {
             return "";
         }

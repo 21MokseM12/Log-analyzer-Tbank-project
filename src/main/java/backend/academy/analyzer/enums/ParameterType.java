@@ -2,7 +2,17 @@ package backend.academy.analyzer.enums;
 
 public enum ParameterType {
 
-    PATH("--path"), FROM("--from"), TO("--to"), FORMAT("--format");
+    PATH("--path"),
+
+    FROM("--from"),
+
+    TO("--to"),
+
+    FORMAT("--format"),
+
+    FILTER_FIELD("--filter-field"),
+
+    FILTER_VALUE("--filter-value"),;
 
     private final String type;
 

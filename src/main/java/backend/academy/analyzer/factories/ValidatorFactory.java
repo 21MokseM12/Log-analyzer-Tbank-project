@@ -1,6 +1,8 @@
 package backend.academy.analyzer.factories;
 
 import backend.academy.analyzer.enums.ParameterType;
+import backend.academy.analyzer.validators.FilterFieldValidator;
+import backend.academy.analyzer.validators.FilterValueValidator;
 import backend.academy.analyzer.validators.FormatParameterValidator;
 import backend.academy.analyzer.validators.FromParameterValidator;
 import backend.academy.analyzer.validators.ParameterValidator;
@@ -23,6 +25,10 @@ public class ValidatorFactory {
                 validators.put(type, new ToParameterValidator());
             } else if (type.equals(ParameterType.FORMAT)) {
                 validators.put(type, new FormatParameterValidator());
+            } else if (type.equals(ParameterType.FILTER_FIELD)) {
+                validators.put(type, new FilterFieldValidator());
+            } else if (type.equals(ParameterType.FILTER_VALUE)) {
+                validators.put(type, new FilterValueValidator());
             }
         }
     }
