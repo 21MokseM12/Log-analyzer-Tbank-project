@@ -2,6 +2,8 @@ package backend.academy.analyzer.service.analyzers;
 
 import backend.academy.analyzer.model.Log;
 import backend.academy.analyzer.model.LogReport;
+import backend.academy.analyzer.service.filters.LogFilter;
+import backend.academy.analyzer.service.filters.LogFilterImpl;
 import backend.academy.analyzer.service.parsers.interfaces.LogParser;
 import backend.academy.analyzer.service.parsers.impl.LogParserImpl;
 import backend.academy.analyzer.service.readers.LogLocalFileReader;
@@ -18,6 +20,8 @@ public class LoggerAnalyzerTest {
     private static final String PATH = "./src/test/resources/logs/analyzer/test.txt";
 
     private final LogParser logParser = new LogParserImpl();
+
+    private final LogFilter logFilter = new LogFilterImpl();
 
     private final Analyzer analyzer = new LoggerAnalyzer(logParser);
 
@@ -37,7 +41,13 @@ public class LoggerAnalyzerTest {
             13, 138, 324,
             resources, statusCodes, clientIps, userAgents);
 
-        Stream<Log> logs = logParser.parseToLog(reader.read(PATH), LocalDateTime.MIN, LocalDateTime.MAX);
+        Stream<Log> logs = logFilter.filterLogs(
+            logParser.parseToLog(reader.read(PATH)),
+            LocalDateTime.MIN,
+            LocalDateTime.MAX,
+            "",
+            ""
+        );
         LogReport report = analyzer.analyze(logs, List.of("sources"), LocalDateTime.MIN, LocalDateTime.MAX);
         assertTrue(report.equals(firstResult) || report.equals(secondResult));
     }

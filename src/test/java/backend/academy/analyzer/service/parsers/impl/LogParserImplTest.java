@@ -1,18 +1,14 @@
 package backend.academy.analyzer.service.parsers.impl;
 
-import backend.academy.analyzer.model.Log;
 import backend.academy.analyzer.service.parsers.interfaces.LogParser;
 import backend.academy.analyzer.service.readers.LogLocalFileReader;
 import backend.academy.analyzer.service.readers.LogReader;
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class LogParserImplTest {
@@ -37,61 +33,14 @@ public class LogParserImplTest {
 
     @Test
     public void checkParseAllLogsSuccess() {
-        assertTrue(parser.parseToLog(reader.read(PATH),
-            LocalDateTime.MIN,
-            LocalDateTime.MAX
-            )
+        assertTrue(parser.parseToLog(reader.read(PATH))
             .findAny()
             .isPresent());
     }
 
     @Test
-    public void checkParseLogInTimeRangeSuccess() {
-        assertTrue(parser.parseToLog(reader.read(PATH),
-                LocalDateTime.of(2015, 5, 22, 2, 0, 0),
-                LocalDateTime.of(2015, 5, 23, 10, 0, 0)
-            )
-            .findAny()
-            .isPresent());
-    }
-
-    @Test
-    public void checkParseExactlyOneLog() {
-        assertTrue(parser.parseToLog(reader.read(PATH),
-                LocalDateTime.of(2015, 5, 22, 2, 5, 0),
-                LocalDateTime.of(2015, 5, 22, 2, 5, 0)
-            )
-            .findAny()
-            .isPresent());
-    }
-
-    @Test
-    public void checkParseWithInvalidTime() {
-        assertFalse(parser.parseToLog(reader.read(PATH),
-                LocalDateTime.of(2015, 5, 18, 8, 0, 0),
-                LocalDateTime.of(2015, 5, 17, 10, 0, 0)
-            )
-            .findAny()
-            .isPresent());
-    }
-
-    @Test
-    public void checkCorrectLogConverting() {
-        List<Log> logs = parser.parseToLog(reader.read(PATH),
-            LocalDateTime.of(2015, 5, 22, 2, 5, 0),
-            LocalDateTime.of(2015, 5, 22, 2, 5, 0))
-            .toList();
-
-        List<Log> result = List.of(new Log("184.168.128.52", "-",
-            LocalDateTime.of(2015, 5, 22, 2, 5, 0), "\"GET /downloads/product_2 HTTP/1.1\"",
-            200, 951, "\"-\"", "\"urlgrabber/3.9.1 yum/3.2.29\""));
-
-        assertEquals(result, logs);
-    }
-
-    @Test
-    public void checkParseLogRequestResourceName() {
-        assertEquals("product_1", parser.parseLogRequestResource(REQUEST_SAMPLE));
+    public void checkParseLogRequestResourceNameName() {
+        assertEquals("product_1", parser.parseLogRequestResourceName(REQUEST_SAMPLE));
     }
 
     @ParameterizedTest
