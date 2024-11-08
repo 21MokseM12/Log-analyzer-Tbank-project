@@ -7,11 +7,11 @@ public enum PrintFormat {
 
     private final String format;
 
-    @Getter private final String fileType;
+    @Getter private final String fileExtension;
 
-    PrintFormat(String format, String fileType) {
+    PrintFormat(String format, String fileExtension) {
         this.format = format;
-        this.fileType = fileType;
+        this.fileExtension = fileExtension;
     }
 
     @Override

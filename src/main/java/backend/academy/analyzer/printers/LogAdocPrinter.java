@@ -1,6 +1,7 @@
 package backend.academy.analyzer.printers;
 
 import backend.academy.analyzer.enums.HttpStatusCodes;
+import backend.academy.analyzer.enums.PrintFormat;
 import backend.academy.analyzer.enums.ReportTopic;
 import backend.academy.analyzer.model.LogReport;
 import java.util.Map;
@@ -25,7 +26,7 @@ public class LogAdocPrinter extends LogPrinter {
     private static final String NEW_LINE = "\n";
 
     public LogAdocPrinter(String reportPath) {
-        super(reportPath);
+        super(reportPath, PrintFormat.ADOC.fileExtension());
     }
 
     @Override

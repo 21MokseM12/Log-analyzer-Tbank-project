@@ -8,14 +8,24 @@ import java.io.FileWriter;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public abstract class LogPrinter {
+
+    private static final String REPORT_DIRECTORY = "reports/";
+
+    private static final String REPORT_FILE_NAME_PATTERN = "report-";
 
     private final String reportPath;
 
-    public LogPrinter(String reportPath) {
+    private final String reportFileExtension;
+
+    public LogPrinter(String reportPath, String reportFileExtension) {
         this.reportPath = reportPath;
+        this.reportFileExtension = reportFileExtension;
     }
 
     abstract String generalTable(LogReport report);
@@ -72,7 +82,12 @@ public abstract class LogPrinter {
 
     @SneakyThrows
     private void printFile(String data, String path) {
-        File reportFile = new File(path);
+        String pathToDirectory = path.concat(REPORT_DIRECTORY);
+        new File(pathToDirectory).mkdir();
+        File reportFile = new File(pathToDirectory
+            .concat(REPORT_FILE_NAME_PATTERN)
+            .concat(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH-mm-ss")))
+            .concat(reportFileExtension));
         BufferedWriter printer = new BufferedWriter(new FileWriter(reportFile, StandardCharsets.UTF_8));
         printer.write(data);
         printer.flush();
