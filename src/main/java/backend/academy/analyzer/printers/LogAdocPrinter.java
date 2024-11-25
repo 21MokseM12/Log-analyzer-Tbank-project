@@ -1,10 +1,10 @@
 package backend.academy.analyzer.printers;
 
-import backend.academy.analyzer.enums.HttpStatusCodes;
 import backend.academy.analyzer.enums.PrintFormat;
 import backend.academy.analyzer.enums.ReportTopic;
 import backend.academy.analyzer.model.LogReport;
 import java.util.Map;
+import org.springframework.http.HttpStatus;
 
 public class LogAdocPrinter extends LogPrinter {
 
@@ -76,7 +76,7 @@ public class LogAdocPrinter extends LogPrinter {
         for (Map.Entry<Integer, Integer> entry : report.popularStatusCodes().entrySet()) {
             builder.append(rowTableByPattern(TRIPLE_PATTERN,
                 String.valueOf(entry.getKey()),
-                HttpStatusCodes.getStatusFromCode(entry.getKey()),
+                HttpStatus.valueOf(entry.getKey()).getReasonPhrase(),
                 String.valueOf(entry.getValue())));
         }
         builder.append(TABLE_END).append(DOUBLE_NEW_LINE);
