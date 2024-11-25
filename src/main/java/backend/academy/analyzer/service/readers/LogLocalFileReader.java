@@ -2,11 +2,15 @@ package backend.academy.analyzer.service.readers;
 
 import backend.academy.analyzer.service.parsers.impl.DirectoryPathParserImpl;
 import backend.academy.analyzer.service.parsers.interfaces.DirectoryPathParser;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.NoSuchElementException;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -53,6 +57,11 @@ public class LogLocalFileReader implements LogReader {
     }
 
     private Stream<String> findDataByFilePath(String stringPath) throws IOException {
-        return Files.readAllLines(Path.of(stringPath)).stream();
+        BufferedReader reader = Files.newBufferedReader(Path.of(stringPath));
+        Spliterator<String> spliterator = Spliterators.spliteratorUnknownSize(
+            reader.lines().iterator(),
+            Spliterator.ORDERED
+        );
+        return StreamSupport.stream(spliterator, false);
     }
 }
